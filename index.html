@@ -1,0 +1,1915 @@
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+
+    <title>Quiz Game</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 100vh;
+
+            background-color: #f0f0f0;
+
+            margin: 0;
+
+            padding: 10px;
+
+            box-sizing: border-box;
+
+            -webkit-text-size-adjust: 100%;
+
+            -ms-text-size-adjust: 100%;
+
+        }        .quiz-container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 1200px;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .category-selector {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .category-selector select {
+            padding: 8px 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background-color: white;
+            color: #007bff;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            max-width: 200px;
+        }
+
+        .category-selector select:hover {
+            background-color: #f8f9fa;
+        }
+
+        .quiz-header {
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+        }
+
+        .quiz-header h1 {
+
+            font-size: 1.5rem;
+
+            margin: 0 0 10px 0;
+
+        }
+
+        .quiz-content {
+
+            display: flex;
+
+            flex: 1;
+
+            gap: 30px;
+
+            min-height: 0;
+
+        }
+
+        .image-section {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            min-height: 0;
+
+        }
+
+        .controls-section {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+            min-height: 0;
+
+        }
+
+        img {
+
+            max-width: 100%;
+
+            max-height: 60vh;
+
+            width: auto;
+
+            height: auto;
+
+            border: 1px solid #ddd;
+
+            border-radius: 4px;
+
+            object-fit: contain;
+
+        }
+
+        .options button {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 8px;
+
+            border: 1px solid #007bff;
+
+            border-radius: 5px;
+
+            background-color: #007bff;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: background-color 0.3s, color 0.3s;
+
+            text-align: left;
+
+            position: relative;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+        .options button .option-number {
+
+            display: inline-block;
+
+            background-color: rgba(255, 255, 255, 0.2);
+
+            border-radius: 50%;
+
+            width: 26px;
+
+            height: 26px;
+
+            line-height: 26px;
+
+            text-align: center;
+
+            margin-right: 10px;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+        }
+
+        .options button:hover {
+
+            background-color: #0056b3;
+
+        }
+
+        .options button.correct {
+
+            background-color: #28a745;
+
+            border-color: #28a745;
+
+        }
+
+        .options button.incorrect {
+
+            background-color: #dc3545;
+
+            border-color: #dc3545;
+
+        }
+
+        #feedback {
+
+            font-weight: bold;
+
+            margin: 15px 0;
+
+            min-height: 24px;
+
+        }
+
+        .bottom-controls {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 10px;
+
+        }
+
+        #next-button {
+
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            background-color: #6c757d;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color: transparent;
+
+            min-height: 44px;
+
+        }
+
+        #next-button:hover {
+
+            background-color: #5a6268;
+
+        }
+
+        .keyboard-hint {
+
+            font-size: 12px;
+
+            color: #666;
+
+            text-align: center;
+
+            margin-top: 10px;
+
+            font-style: italic;
+
+        }
+
+        .score-container {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-weight: bold;
+
+            color: #333;
+
+            margin-bottom: 15px;
+
+        }
+
+        .timer-container {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+
+        }
+
+        .options-area {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            min-height: 200px;
+
+        }
+
+        .game-complete {
+
+            background-color: #e7f3ff;
+
+            border: 2px solid #007bff;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            text-align: center;
+
+            z-index: 1000;
+
+            min-width: 300px;
+
+        }
+
+        .final-score {
+
+            font-size: 24px;
+
+            color: #007bff;
+
+            margin: 10px 0;
+
+        }
+
+        #restart-button {
+
+            padding: 12px 20px;
+
+            margin-top: 10px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            background-color: #007bff;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color: transparent;
+
+            min-height: 44px;
+
+        }
+
+        #restart-button:hover {
+
+            background-color: #0056b3;
+
+        }
+
+        .timer-container {
+
+            margin-bottom: 15px;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+        }
+
+        .timer {
+
+            display: inline-block;
+
+            padding: 8px 16px;
+
+            border-radius: 20px;
+
+            color: white;
+
+            min-width: 80px;
+
+            text-align: center;
+
+        }
+
+        .timer.normal {
+
+            background-color: #28a745;
+
+        }
+
+        .timer.warning {
+
+            background-color: #ffc107;
+
+            color: #333;
+
+        }
+
+        .timer.danger {
+
+            background-color: #dc3545;
+
+            animation: pulse 0.5s infinite alternate;
+
+        }
+
+        @keyframes pulse {
+
+            from { opacity: 1; }
+
+            to { opacity: 0.7; }
+
+        }
+
+        .pronunciation-container {
+
+            text-align: center;
+
+        }
+
+        .pronunciation-button {
+
+            background-color: #17a2b8;
+
+            color: white;
+
+            border: none;
+
+            padding: 10px 16px;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            transition: background-color 0.3s;
+
+            margin: 0 5px;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color: transparent;
+
+            min-height: 44px;
+
+        }
+
+        .pronunciation-button:hover {
+
+            background-color: #138496;
+
+        }
+
+        .pronunciation-button:disabled {
+
+            background-color: #6c757d;
+
+            cursor: not-allowed;
+
+        }
+
+        .pronunciation-text {
+
+            font-style: italic;
+
+            color: #666;
+
+            font-size: 14px;
+
+            margin-top: 5px;
+
+        }
+
+        
+
+        @media (max-width: 768px) {
+
+            body {
+
+                padding: 5px;
+
+            }
+
+            
+
+            .quiz-container {
+
+                padding: 10px;
+
+                height: 98vh;
+
+                width: 98%;
+
+            }
+
+            
+
+            .quiz-content {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+            
+
+            .quiz-container {
+
+                height: auto;
+
+                max-height: 98vh;
+
+                overflow-y: auto;
+
+            }
+
+            
+
+            img {
+
+                max-height: 35vh;
+
+                width: 100%;
+
+                object-fit: contain;
+
+            }
+
+            
+
+            .quiz-header h1 {
+
+                font-size: 1.3rem;
+
+                margin-bottom: 8px;
+
+            }
+
+            
+
+            .score-container {
+
+                font-size: 14px;
+
+                margin-bottom: 10px;
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 10px;
+
+            }
+
+            
+
+            .timer-container {
+
+                font-size: 16px;
+
+                margin-bottom: 10px;
+
+            }
+
+            
+
+            .options button {
+
+                padding: 15px 12px;
+
+                margin-bottom: 6px;
+
+                font-size: 15px;
+
+            }
+
+            
+
+            .options button .option-number {
+
+                width: 28px;
+
+                height: 28px;
+
+                line-height: 28px;
+
+                margin-right: 8px;
+
+            }
+
+            
+
+            .keyboard-hint {
+
+                font-size: 11px;
+
+                margin-top: 5px;
+
+            }
+
+            
+
+            .pronunciation-button {
+
+                padding: 12px 20px;
+
+                font-size: 13px;
+
+            }
+
+            
+
+            .category-selector select {
+
+                width: 100%;
+
+                max-width: 250px;
+
+                margin: 5px 0;
+
+            }
+
+            
+
+            .bottom-controls {
+
+                gap: 8px;
+
+            }
+
+            
+
+            .game-complete {
+
+                width: 90%;
+
+                min-width: auto;
+
+                max-width: 350px;
+
+                padding: 15px;
+
+            }
+
+            
+
+            .final-score {
+
+                font-size: 20px;
+
+            }
+
+        }
+
+        
+
+        @media (max-width: 480px) {
+
+            .quiz-header h1 {
+
+                font-size: 1.2rem;
+
+            }
+
+            
+
+            .score-container {
+
+                font-size: 13px;
+
+                gap: 5px;
+
+            }
+
+            
+
+            .timer-container {
+
+                font-size: 15px;
+
+            }
+
+            
+
+            .options button {
+
+                padding: 18px 10px;
+
+                font-size: 14px;
+
+            }
+
+            
+
+            .options button .option-number {
+
+                width: 30px;
+
+                height: 30px;
+
+                line-height: 30px;
+
+                font-size: 13px;
+
+            }
+
+            
+
+            img {
+
+                max-height: 30vh;
+
+            }
+
+            
+
+            .quiz-container {
+
+                padding: 8px;
+
+            }
+
+            
+
+            .pronunciation-text {
+
+                font-size: 13px;
+
+            }
+
+            
+
+            .keyboard-hint {
+
+                font-size: 10px;
+
+            }
+
+        }
+
+        
+
+        @media (orientation: landscape) and (max-height: 600px) {
+
+            .quiz-container {
+
+                height: 95vh;
+
+            }
+
+            
+
+            .quiz-content {
+
+                flex-direction: row;
+
+                gap: 15px;
+
+            }
+
+            
+
+            img {
+
+                max-height: 50vh;
+
+            }
+
+            
+
+            .options button {
+
+                padding: 10px;
+
+                margin-bottom: 5px;
+
+                font-size: 14px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 id="quiz-title">What is this?</h1>
+            
+            <div class="category-selector">
+                <label for="category-select">Choose Category:</label>
+                <select id="category-select">
+                    <option value="flowers">Flowers</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="flags">Country Flags</option>
+                    <option value="animals">Animals</option>
+                </select>
+            </div>
+            
+            <div class="score-container">
+                <span>Score: <span id="score">0</span> / <span id="total-questions">0</span></span>
+                <span>Question: <span id="current-question">1</span> / <span id="total-items">0</span></span>
+            </div>
+            <div class="timer-container">
+                Time: <span id="timer" class="timer normal">10</span>
+            </div>
+        </div>
+
+          <div class="quiz-content">
+            <div class="image-section">
+                <img id="quiz-image" src="" alt="Quiz Image">
+            </div>
+            
+            <div class="controls-section">
+                <div class="options-area">
+                    <div id="options" class="options"></div>
+                </div>
+                
+                <div class="bottom-controls">
+                    <div id="feedback"></div>
+                    <div class="pronunciation-container" id="pronunciation-container" style="display: none;">
+                        <button class="pronunciation-button" id="pronunciation-button">🔊 Hear Pronunciation</button>
+                        <div class="pronunciation-text" id="pronunciation-text"></div>
+                    </div>
+                    <button id="next-button" style="display: none;">Next Item</button>
+                    <div class="keyboard-hint">Press 1-4 to select • Space for next item</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game-complete" class="game-complete" style="display: none;">
+            <h2 id="completion-title">� Quiz Complete! �</h2>
+            <div class="final-score">Final Score: <span id="final-score"></span></div>
+            <p id="performance-message"></p>
+            <button id="restart-button">Start New Game</button>
+        </div>
+
+    </div>    <script>
+        // Quiz categories configuration
+        const quizCategories = {
+            flowers: {
+                title: "What flower is this?",
+                completionEmoji: "🌸",
+                items: [
+                    { name: "Tulip", image: "flowers/tulip.png" },
+                    { name: "Water Lily", image: "flowers/waterlily.png" },
+                    { name: "Geranium", image: "flowers/gernanium.png" },
+                    { name: "Rose", image: "flowers/rose.png" },
+                    { name: "Dandelion", image: "flowers/dandelion.png" },
+                    { name: "Foxglove", image: "flowers/foxlove.png" },
+                    { name: "Flax", image: "flowers/flax.png" },
+                    { name: "Crocus", image: "flowers/crocus.png" },
+                    { name: "Glory Lily", image: "flowers/glorylily.png" },
+                    { name: "Sunflower", image: "flowers/sunflower.png" },
+                    { name: "Hiptage", image: "flowers/hiptage.png" },
+                    { name: "Palash", image: "flowers/palash.png" },
+                    { name: "Hibiscus", image: "flowers/hibiscus.png" },
+                    { name: "Basil", image: "flowers/basil.png" },
+                    { name: "Murraya", image: "flowers/murraya.png" },
+                    { name: "Cockscomb", image: "flowers/cockscomb.png" },
+                    { name: "Lilac", image: "flowers/lilac.png" },
+                    { name: "Kerria", image: "flowers/kerria.png" },
+                    { name: "Serio Lily", image: "flowers/seriolily.png" },
+                    { name: "Pink Lily", image: "flowers/pinklily.png" },
+                    { name: "Balsam", image: "flowers/balsam.png" },
+                    { name: "Poppy", image: "flowers/poppy.png" },
+                    { name: "Rohida", image: "flowers/rohida.png" },
+                    { name: "Primrose", image: "flowers/primrose.png" },
+                    { name: "Pansy", image: "flowers/pansy.png" },
+                    { name: "Datura", image: "flowers/datura.png" },
+                    { name: "Dahlia", image: "flowers/dahlia.png" },
+                    { name: "Daffodil", image: "flowers/daffodil.png" },
+                    { name: "Orchid", image: "flowers/orchid.png" },
+                    { name: "Peony", image: "flowers/peony.png" },
+                    { name: "Asiatic Lily", image: "flowers/asiaticlily.png" },
+                    { name: "Gerbera", image: "flowers/gerbera.png" },
+                    { name: "Rosemary", image: "flowers/rosemary.png" },
+                    { name: "Jasmine", image: "flowers/jasmine.png" },
+                    { name: "Marigold", image: "flowers/marigold.png" },
+                    { name: "Zinnia", image: "flowers/zinnia.png" },
+                    { name: "Aster", image: "flowers/aster.png" },
+                    { name: "Indigo", image: "flowers/indigo.png" },
+                    { name: "Daisy", image: "flowers/daisy.png" },
+                    { name: "Bleeding Heart", image: "flowers/bleedingheart.png" },
+                    { name: "Anemone", image: "flowers/anemone.png" },
+                    { name: "Lotus", image: "flowers/lotus.png" },
+                    { name: "Canna", image: "flowers/canna.png" },
+                    { name: "Iris", image: "flowers/iris.png" },
+                    { name: "Frangipani", image: "flowers/frangipani.png" },
+                    { name: "Echinacea", image: "flowers/echinacea.png" },
+                    { name: "Gardenia", image: "flowers/gardenia.png" }
+                ],
+                phoneticMap: {
+                    "Anemone": "uh-NEM-uh-nee",
+                    "Dahlia": "DAL-yuh",
+                    "Daffodil": "DAF-uh-dil",
+                    "Echinacea": "ek-ih-NAY-see-uh",
+                    "Foxglove": "FOKS-gluhv",
+                    "Frangipani": "fran-ji-PAH-nee",
+                    "Geranium": "juh-RAY-nee-uhm",
+                    "Hibiscus": "hi-BIS-kuhs",
+                    "Hiptage": "HIP-tij",
+                    "Jasmine": "JAZ-min",
+                    "Kerria": "KER-ee-uh",
+                    "Lilac": "LIE-lak",
+                    "Murraya": "mur-RAY-uh",
+                    "Orchid": "OR-kid",
+                    "Palash": "puh-LASH",
+                    "Peony": "PEE-uh-nee",
+                    "Primrose": "PRIM-rohz",
+                    "Rohida": "roh-HEE-duh",
+                    "Serio Lily": "SEER-ee-oh LIL-ee",
+                    "Zinnia": "ZIN-ee-uh"
+                }
+            },
+            fruits: {
+                title: "What fruit is this?",
+                completionEmoji: "🍎",
+                items: [
+                    { name: "Grape", image: "fruits/grape.png" },
+                    { name: "Mango", image: "fruits/mango.png" },
+                    { name: "Orange", image: "fruits/orange.png" },
+                    { name: "Plum", image: "fruits/plum.png" },
+                    { name: "Apricot", image: "fruits/apricot.png" },
+                    { name: "Avocado", image: "fruits/avocado.png" },
+                    { name: "Custard Apple", image: "fruits/custardapple.png" },
+                    { name: "Guava", image: "fruits/guava.png" },
+                    { name: "Pumpkin", image: "fruits/pumpkin.png" },
+                    { name: "Sapodilla", image: "fruits/sapodilla.png" },
+                    { name: "Apple", image: "fruits/apple.png" },
+                    { name: "Melon", image: "fruits/melon.png" },
+                    { name: "Shaddock", image: "fruits/shaddock.png" },
+                    { name: "Jackfruit", image: "fruits/jackfruit.png" },
+                    { name: "Watermelon", image: "fruits/watermelon.png" },
+                    { name: "Pomegranate", image: "fruits/pomegranate.png" },
+                    { name: "Pear", image: "fruits/pear.png" },
+                    { name: "Cherry", image: "fruits/cherry.png" },
+                    { name: "Banana", image: "fruits/banana.png" },
+                    { name: "Damson", image: "fruits/damson.png" },
+                    { name: "Papaya", image: "fruits/papaya.png" },
+                    { name: "Gooseberry", image: "fruits/gooseberry.png" },
+                    { name: "Durian", image: "fruits/durian.png" },
+                    { name: "Raspberry", image: "fruits/raspberry.png" },
+                    { name: "Coconut", image: "fruits/coconut.png" },
+                    { name: "Kiwi", image: "fruits/kiwi.png" },
+                    { name: "Jamunfruit", image: "fruits/jamunfruit.png" },
+                    { name: "Mulberry", image: "fruits/mulberry.png" },
+                    { name: "Persimmon", image: "fruits/persimmon.png" },
+                    { name: "Quince", image: "fruits/quince.png" },
+                    { name: "Jujube", image: "fruits/jujube.png" },
+                    { name: "Elderberry", image: "fruits/elderberry.png" },
+                    { name: "Olive", image: "fruits/olive.png" },
+                    { name: "Tamarind", image: "fruits/tamarind.png" },
+                    { name: "Cashew Apple", image: "fruits/cashewapple.png" },
+                    { name: "Dates", image: "fruits/dates.png" },
+                    { name: "Blueberry", image: "fruits/blueberry.png" },
+                    { name: "Carambola", image: "fruits/carambola.png" },
+                    { name: "Cranberry", image: "fruits/cranberry.png" },
+                    { name: "Grapefruit", image: "fruits/grapefruit.png" },
+                    { name: "Lychee", image: "fruits/lychee.png" },
+                    { name: "Strawberry", image: "fruits/strawberry.png" },
+                    { name: "Dragon Fruit", image: "fruits/dragon_fruit.png" },
+                    { name: "Red Currant", image: "fruits/redcurrant.png" },
+                    { name: "Sugarcane", image: "fruits/sugarcane.png" },
+                    { name: "Pineapple", image: "fruits/pineapple.png" }
+                ],
+                phoneticMap: {
+                    "Pomegranate": "POM-ih-gran-it",
+                    "Grapefruit": "GRAYP-froot",
+                    "Avocado": "av-uh-KAH-doh",
+                    "Papaya": "puh-PIE-yuh",
+                    "Dragon Fruit": "DRAG-uhn froot",
+                    "Custard Apple": "KUS-terd AP-uhl",
+                    "Sapodilla": "sap-uh-DIL-uh",
+                    "Shaddock": "SHAD-uhk",
+                    "Jackfruit": "JAK-froot",
+                    "Damson": "DAM-zuhn",
+                    "Gooseberry": "GOOS-ber-ee",
+                    "Durian": "DUR-ee-uhn",
+                    "Jamunfruit": "jah-MOON-froot",
+                    "Mulberry": "MUL-ber-ee",
+                    "Persimmon": "per-SIM-uhn",
+                    "Quince": "kwins",
+                    "Jujube": "JOO-joob",
+                    "Elderberry": "EL-der-ber-ee",
+                    "Tamarind": "TAM-uh-rind",
+                    "Cashew Apple": "KASH-oo AP-uhl",
+                    "Carambola": "kar-uhm-BOH-luh",
+                    "Lychee": "LIE-chee",
+                    "Red Currant": "red KUR-uhnt",
+                    "Sugarcane": "SHUG-er-kayn"
+                }
+            },
+            flags: {
+                title: "Which country's flag is this?",
+                completionEmoji: "🏳️",
+                items: [
+                    { name: "United States", image: "flags/usa.png" },
+                    { name: "United Kingdom", image: "flags/uk.png" },
+                    { name: "France", image: "flags/france.png" },
+                    { name: "Germany", image: "flags/germany.png" },
+                    { name: "Japan", image: "flags/japan.png" },
+                    { name: "China", image: "flags/china.png" },
+                    { name: "India", image: "flags/india.png" },
+                    { name: "Brazil", image: "flags/brazil.png" },
+                    { name: "Canada", image: "flags/canada.png" },
+                    { name: "Australia", image: "flags/australia.png" },
+                    { name: "Russia", image: "flags/russia.png" },
+                    { name: "Italy", image: "flags/italy.png" },
+                    { name: "Spain", image: "flags/spain.png" },
+                    { name: "Mexico", image: "flags/mexico.png" },
+                    { name: "South Korea", image: "flags/south_korea.png" },
+                    { name: "Netherlands", image: "flags/netherlands.png" },
+                    { name: "Sweden", image: "flags/sweden.png" },
+                    { name: "Norway", image: "flags/norway.png" },
+                    { name: "Switzerland", image: "flags/switzerland.png" },
+                    { name: "Argentina", image: "flags/argentina.png" }
+                ],
+                phoneticMap: {
+                    "Netherlands": "NETH-er-landz",
+                    "Switzerland": "SWIT-ser-land"
+                }
+            },
+            animals: {
+                title: "What animal is this?",
+                completionEmoji: "🐾",
+                items: [
+                    { name: "Lion", image: "animals/lion.png" },
+                    { name: "Tiger", image: "animals/tiger.png" },
+                    { name: "Elephant", image: "animals/elephant.png" },
+                    { name: "Giraffe", image: "animals/giraffe.png" },
+                    { name: "Zebra", image: "animals/zebra.png" },
+                    { name: "Panda", image: "animals/panda.png" },
+                    { name: "Kangaroo", image: "animals/kangaroo.png" },
+                    { name: "Penguin", image: "animals/penguin.png" },
+                    { name: "Dolphin", image: "animals/dolphin.png" },
+                    { name: "Whale", image: "animals/whale.png" },
+                    { name: "Eagle", image: "animals/eagle.png" },
+                    { name: "Owl", image: "animals/owl.png" },
+                    { name: "Bear", image: "animals/bear.png" },
+                    { name: "Wolf", image: "animals/wolf.png" },
+                    { name: "Fox", image: "animals/fox.png" },
+                    { name: "Rabbit", image: "animals/rabbit.png" },
+                    { name: "Squirrel", image: "animals/squirrel.png" },
+                    { name: "Deer", image: "animals/deer.png" },
+                    { name: "Horse", image: "animals/horse.png" },
+                    { name: "Cow", image: "animals/cow.png" }
+                ],
+                phoneticMap: {
+                    "Giraffe": "juh-RAF",
+                    "Kangaroo": "kang-guh-ROO"
+                }
+            }
+        };
+
+        // Current category and game state
+        let currentCategory = 'flowers';
+        let currentCategoryData = quizCategories[currentCategory];
+        let currentItem = {};
+        let selectedOptions = [];
+        let usedItems = [];
+        let currentQuestionNumber = 1;
+        let score = 0;
+        let totalQuestions = 0;
+        let timeLeft = 10;
+        let timerInterval = null;
+        let questionAnswered = false;
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        let optionsTimeout = null;
+        let autoNextTimeout = null;
+        
+        // Audio context for sound effects
+        let audioContext = null;
+        
+        // Initialize audio context
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }        // DOM elements
+        const quizImage = document.getElementById('quiz-image');
+        const optionsContainer = document.getElementById('options');
+        const feedbackDiv = document.getElementById('feedback');
+        const nextButton = document.getElementById('next-button');
+        const scoreElement = document.getElementById('score');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const currentQuestionElement = document.getElementById('current-question');
+        const totalItemsElement = document.getElementById('total-items');
+        const gameCompleteDiv = document.getElementById('game-complete');
+        const finalScoreElement = document.getElementById('final-score');
+        const performanceMessageElement = document.getElementById('performance-message');
+        const restartButton = document.getElementById('restart-button');
+        const timerElement = document.getElementById('timer');
+        const pronunciationContainer = document.getElementById('pronunciation-container');
+        const pronunciationButton = document.getElementById('pronunciation-button');
+        const pronunciationText = document.getElementById('pronunciation-text');
+        const categorySelect = document.getElementById('category-select');
+        const quizTitle = document.getElementById('quiz-title');
+        const completionTitle = document.getElementById('completion-title');
+
+        function changeCategory() {
+            currentCategory = categorySelect.value;
+            currentCategoryData = quizCategories[currentCategory];
+            quizTitle.textContent = currentCategoryData.title;
+            completionTitle.innerHTML = `${currentCategoryData.completionEmoji} Quiz Complete! ${currentCategoryData.completionEmoji}`;
+            initializeGame();
+        }
+
+        function getAllItemNames() {
+            return currentCategoryData.items.map(item => item.name);
+        }        function initializeGame() {
+            usedItems = [];
+            currentQuestionNumber = 1;
+            score = 0;
+            totalQuestions = 0;
+            timeLeft = 10;
+            questionAnswered = false;
+            
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // Clear any existing options timeout
+            if (optionsTimeout) {
+                clearTimeout(optionsTimeout);
+                optionsTimeout = null;
+            }
+            
+            // Clear any existing auto next timeout
+            if (autoNextTimeout) {
+                clearTimeout(autoNextTimeout);
+                autoNextTimeout = null;
+            }
+            
+            gameCompleteDiv.style.display = 'none';
+            
+            // Set total items count
+            totalItemsElement.textContent = currentCategoryData.items.length;
+            
+            updateScoreDisplay();
+            loadQuestion();
+        }
+
+        function updateScoreDisplay() {
+            scoreElement.textContent = score;
+            totalQuestionsElement.textContent = totalQuestions;
+            currentQuestionElement.textContent = currentQuestionNumber;
+        }
+
+        function speakItemName(itemName) {
+            // Stop any currently playing speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+            }
+            
+            // Create new utterance
+            currentUtterance = new SpeechSynthesisUtterance(itemName);
+            
+            // Configure speech settings
+            currentUtterance.rate = 0.8; // Slightly slower for clarity
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+            
+            // Try to use a more natural voice if available
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => 
+                voice.lang.startsWith('en') && 
+                (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Alex'))
+            );
+            
+            if (preferredVoice) {
+                currentUtterance.voice = preferredVoice;
+            }
+            
+            // Handle pronunciation button state
+            pronunciationButton.disabled = true;
+            pronunciationButton.textContent = '🔊 Speaking...';
+            
+            currentUtterance.onend = () => {
+                pronunciationButton.disabled = false;
+                pronunciationButton.textContent = '🔊 Hear Pronunciation';
+                currentUtterance = null;
+            };
+            
+            currentUtterance.onerror = () => {
+                pronunciationButton.disabled = false;
+                pronunciationButton.textContent = '🔊 Hear Pronunciation';
+                currentUtterance = null;
+            };
+            
+            // Speak the item name
+            speechSynthesis.speak(currentUtterance);
+        }
+
+        function getPhoneticSpelling(itemName) {
+            // Get phonetic spelling from current category's phonetic map
+            const phoneticMap = currentCategoryData.phoneticMap || {};
+            return phoneticMap[itemName] || `${itemName} (phonetic guide not available)`;
+        }
+
+
+
+        function speakEncouragement() {
+
+            // Array of encouraging phrases
+
+            const encouragements = [
+
+                "Awesome!",
+
+                "Excellent!",
+
+                "Correct!",
+
+                "Well done!",
+
+                "Great job!",
+
+                "Perfect!",
+
+                "Outstanding!",
+
+                "Fantastic!",
+
+                "Brilliant!",
+
+                "Amazing!"
+
+            ];
+
+            
+
+            // Pick a random encouragement
+
+            const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+
+            
+
+            // Stop any currently playing speech
+
+            if (currentUtterance) {
+
+                speechSynthesis.cancel();
+
+            }
+
+            
+
+            // Create new utterance for encouragement
+
+            currentUtterance = new SpeechSynthesisUtterance(randomEncouragement);
+
+            
+
+            // Configure speech settings for encouragement
+
+            currentUtterance.rate = 1.0; // Normal speed for excitement
+
+            currentUtterance.pitch = 1.2; // Slightly higher pitch for enthusiasm
+
+            currentUtterance.volume = 1.0;
+
+            
+
+            // Try to use a more natural voice if available
+
+            const voices = speechSynthesis.getVoices();
+
+            const preferredVoice = voices.find(voice => 
+
+                voice.lang.startsWith('en') && 
+
+                (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Alex'))
+
+            );
+
+            
+
+            if (preferredVoice) {
+
+                currentUtterance.voice = preferredVoice;
+
+            }
+
+            
+
+            currentUtterance.onend = () => {
+
+                currentUtterance = null;
+
+            };
+
+            
+
+            currentUtterance.onerror = () => {
+
+                currentUtterance = null;
+
+            };
+
+            
+
+            // Speak the encouragement
+
+            speechSynthesis.speak(currentUtterance);
+
+        }
+
+
+
+        // Sound effect functions
+
+        function playCorrectSound() {
+
+            initAudioContext();
+
+            if (!audioContext) return;
+
+            
+
+            // Create a pleasant success sound (ascending notes)
+
+            const oscillator1 = audioContext.createOscillator();
+
+            const oscillator2 = audioContext.createOscillator();
+
+            const gainNode = audioContext.createGain();
+
+            
+
+            oscillator1.connect(gainNode);
+
+            oscillator2.connect(gainNode);
+
+            gainNode.connect(audioContext.destination);
+
+            
+
+            // First note (C5)
+
+            oscillator1.frequency.setValueAtTime(523.25, audioContext.currentTime);
+
+            oscillator1.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+
+            oscillator1.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+
+            
+
+            // Harmony note
+
+            oscillator2.frequency.setValueAtTime(659.25, audioContext.currentTime);
+
+            oscillator2.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.1);
+
+            oscillator2.frequency.setValueAtTime(1046.5, audioContext.currentTime + 0.2); // C6
+
+            
+
+            // Volume envelope
+
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
+            gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.02);
+
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+
+            
+
+            oscillator1.type = 'sine';
+
+            oscillator2.type = 'sine';
+
+            
+
+            oscillator1.start(audioContext.currentTime);
+
+            oscillator2.start(audioContext.currentTime);
+
+            
+
+            oscillator1.stop(audioContext.currentTime + 0.4);
+
+            oscillator2.stop(audioContext.currentTime + 0.4);
+
+        }
+
+
+
+        function playIncorrectSound() {
+
+            initAudioContext();
+
+            if (!audioContext) return;
+
+            
+
+            // Create a gentle error sound (descending notes)
+
+            const oscillator = audioContext.createOscillator();
+
+            const gainNode = audioContext.createGain();
+
+            
+
+            oscillator.connect(gainNode);
+
+            gainNode.connect(audioContext.destination);
+
+            
+
+            // Descending notes
+
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+
+            oscillator.frequency.setValueAtTime(350, audioContext.currentTime + 0.15);
+
+            oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.3);
+
+            
+
+            // Volume envelope
+
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
+            gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.02);
+
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            
+
+            oscillator.type = 'sine';
+
+            
+
+            oscillator.start(audioContext.currentTime);
+
+            oscillator.stop(audioContext.currentTime + 0.5);
+
+        }        function playTimeUpSound() {
+            initAudioContext();
+            if (!audioContext) return;
+            
+            // Create a gentle time-up sound (clock-like)
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Two quick beeps
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.02);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.1);
+            gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.15);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.25);
+            
+            oscillator.type = 'square';
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        function speakEncouragement() {
+            const encouragementPhrases = [
+                "Awesome!",
+                "Excellent!",
+                "Correct!",
+                "Well done!",
+                "Great job!",
+                "Perfect!",
+                "Outstanding!",
+                "Fantastic!",
+                "Brilliant!",
+                "Superb!"
+            ];
+            
+            const randomPhrase = encouragementPhrases[Math.floor(Math.random() * encouragementPhrases.length)];
+            
+            // Stop any currently playing speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+            }
+            
+            // Create new utterance for encouragement
+            const encouragementUtterance = new SpeechSynthesisUtterance(randomPhrase);
+            
+            // Configure speech settings
+            encouragementUtterance.rate = 1.0;
+            encouragementUtterance.pitch = 1.2; // Slightly higher pitch for enthusiasm
+            encouragementUtterance.volume = 1.0;
+            
+            // Try to use a more natural voice if available
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => 
+                voice.lang.startsWith('en') && 
+                (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Alex'))
+            );
+            
+            if (preferredVoice) {
+                encouragementUtterance.voice = preferredVoice;
+            }
+            
+            // Speak the encouragement
+            speechSynthesis.speak(encouragementUtterance);
+        }
+
+
+
+        function updateTimer() {
+
+            timerElement.textContent = timeLeft;
+
+            
+
+            // Update timer styling based on time left
+
+            timerElement.className = 'timer';
+
+            if (timeLeft > 6) {
+
+                timerElement.classList.add('normal');
+
+            } else if (timeLeft > 3) {
+
+                timerElement.classList.add('warning');
+
+            } else {
+
+                timerElement.classList.add('danger');
+
+            }
+
+        }
+
+
+
+        function startTimer() {
+
+            timeLeft = 10;
+
+            questionAnswered = false;
+
+            updateTimer();
+
+            
+
+            timerInterval = setInterval(() => {
+
+                timeLeft--;
+
+                updateTimer();
+
+                
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(timerInterval);
+
+                    if (!questionAnswered) {
+
+                        handleTimeUp();
+
+                    }
+
+                }
+
+            }, 1000);
+
+        }        function showOptions() {
+            // Generate options
+            selectedOptions = [];
+            const correctOption = currentItem.name;
+            selectedOptions.push(correctOption);
+
+            const wrongOptions = getRandomItems(3, correctOption);
+            selectedOptions = selectedOptions.concat(wrongOptions);
+
+            // Shuffle options
+            selectedOptions.sort(() => 0.5 - Math.random());
+
+            selectedOptions.forEach((option, index) => {
+                const button = document.createElement('button');
+                const optionNumber = index + 1;
+                button.innerHTML = `<span class="option-number">${optionNumber}</span>${option}`;
+                button.onclick = () => checkAnswer(option);
+                button.setAttribute('data-option-number', optionNumber);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+
+
+        function stopTimer() {
+
+            if (timerInterval) {
+
+                clearInterval(timerInterval);
+
+                timerInterval = null;
+
+            }
+
+            
+
+            if (optionsTimeout) {
+
+                clearTimeout(optionsTimeout);
+
+                optionsTimeout = null;
+
+            }
+
+            
+
+            if (autoNextTimeout) {
+
+                clearTimeout(autoNextTimeout);
+
+                autoNextTimeout = null;
+
+            }
+
+        }        function handleTimeUp() {
+            questionAnswered = true;
+            totalQuestions++;
+            
+            const allButtons = optionsContainer.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === currentItem.name) {
+                    button.classList.add('correct');
+                }
+            });
+
+            feedbackDiv.textContent = `Time's up! The correct answer was ${currentItem.name}.`;
+            feedbackDiv.style.color = 'red';
+            
+            // Play time-up sound
+            playTimeUpSound();
+            
+            // Show pronunciation section
+            pronunciationContainer.style.display = 'block';
+            pronunciationText.textContent = getPhoneticSpelling(currentItem.name);
+            pronunciationButton.disabled = false;
+            pronunciationButton.textContent = '🔊 Hear Pronunciation';
+            
+            updateScoreDisplay();
+            
+            // Check if this was the last question
+            if (usedItems.length >= currentCategoryData.items.length) {
+                setTimeout(() => {
+                    showGameComplete();
+                }, 1500);
+            } else {
+                nextButton.style.display = 'block';
+                currentQuestionNumber++;
+                
+                // Auto-advance to next question after 3 seconds
+                autoNextTimeout = setTimeout(() => {
+                    if (nextButton.style.display !== 'none') {
+                        loadQuestion();
+                    }
+                }, 3000);
+            }
+        }function getRandomItems(count, excludeName) {
+            const allNames = getAllItemNames();
+            const shuffled = allNames.filter(name => name !== excludeName).sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }        function loadQuestion() {
+            // Check if we've used all items
+            if (usedItems.length >= currentCategoryData.items.length) {
+                showGameComplete();
+                return;
+            }
+
+            // Clear any existing auto-advance timeout
+            if (autoNextTimeout) {
+                clearTimeout(autoNextTimeout);
+                autoNextTimeout = null;
+            }
+
+            feedbackDiv.textContent = '';
+            nextButton.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            pronunciationContainer.style.display = 'none';
+            questionAnswered = false;
+
+            // Get an item that hasn't been used yet
+            const availableItems = currentCategoryData.items.filter(item => !usedItems.includes(item.name));
+            
+            if (availableItems.length === 0) {
+                showGameComplete();
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * availableItems.length);
+            currentItem = availableItems[randomIndex];
+
+            // Add to used items
+            usedItems.push(currentItem.name);
+
+            quizImage.src = currentItem.image;
+            quizImage.alt = currentItem.name;
+
+            // Show options after 3 seconds delay
+            optionsTimeout = setTimeout(() => {
+                showOptions();
+            }, 3000);
+
+            updateScoreDisplay();
+            startTimer();
+        }        function checkAnswer(selectedAnswer) {
+            if (questionAnswered) return; // Prevent multiple answers
+            
+            questionAnswered = true;
+            stopTimer();
+            totalQuestions++;
+            
+            const allButtons = optionsContainer.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.disabled = true;
+                const buttonText = button.textContent.substring(1); // Remove the number prefix
+                if (buttonText === currentItem.name) {
+                    button.classList.add('correct');
+                } else if (buttonText === selectedAnswer) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer === currentItem.name) {
+                score++;
+                feedbackDiv.textContent = "Correct! Well done!";
+                feedbackDiv.style.color = 'green';
+                playCorrectSound(); // Play success sound
+                speakEncouragement(); // Speak encouragement phrase
+            } else {
+                feedbackDiv.textContent = `Incorrect. The correct answer was ${currentItem.name}.`;
+                feedbackDiv.style.color = 'red';
+                playIncorrectSound(); // Play error sound
+            }
+
+            // Show pronunciation section
+            pronunciationContainer.style.display = 'block';
+            pronunciationText.textContent = getPhoneticSpelling(currentItem.name);
+            pronunciationButton.disabled = false;
+            pronunciationButton.textContent = '🔊 Hear Pronunciation';
+
+            updateScoreDisplay();
+            
+            // Check if this was the last question
+            if (usedItems.length >= currentCategoryData.items.length) {
+                setTimeout(() => {
+                    showGameComplete();
+                }, 1500);
+            } else {
+                nextButton.style.display = 'block';
+                currentQuestionNumber++;
+                
+                // Auto-advance to next question after 3 seconds
+                autoNextTimeout = setTimeout(() => {
+                    if (nextButton.style.display !== 'none') {
+                        loadQuestion();
+                    }
+                }, 3000);
+            }
+        }        function showGameComplete() {
+            stopTimer();
+            
+            // Stop any playing pronunciation
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                currentUtterance = null;
+            }
+            
+            quizImage.style.display = 'none';
+            optionsContainer.style.display = 'none';
+            feedbackDiv.style.display = 'none';
+            pronunciationContainer.style.display = 'none';
+            nextButton.style.display = 'none';
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            finalScoreElement.textContent = `${score} / ${totalQuestions} (${percentage}%)`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = `🌟 Excellent! You're a ${currentCategory} expert!`;
+            } else if (percentage >= 80) {
+                message = `� Great job! You know your ${currentCategory} well!`;
+            } else if (percentage >= 70) {
+                message = `👍 Good work! Keep learning about ${currentCategory}!`;
+            } else if (percentage >= 60) {
+                message = `😊 Not bad! Practice makes perfect!`;
+            } else {
+                message = `📚 Keep trying! There's always room to learn!`;
+            }
+            
+            performanceMessageElement.textContent = message;
+            gameCompleteDiv.style.display = 'block';
+        }
+
+        function restartGame() {
+            // Stop any playing pronunciation
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                currentUtterance = null;
+            }
+            
+            quizImage.style.display = 'block';
+            optionsContainer.style.display = 'block';
+            feedbackDiv.style.display = 'block';
+            
+            initializeGame();
+        }// Event listeners
+        nextButton.onclick = loadQuestion;
+        restartButton.onclick = restartGame;
+        pronunciationButton.onclick = () => speakItemName(currentItem.name);
+        categorySelect.onchange = changeCategory;
+        
+        // Keyboard event listeners
+        document.addEventListener('keydown', (event) => {
+            // Handle number keys 1-4 for option selection
+            if (event.key >= '1' && event.key <= '4') {
+                const optionNumber = parseInt(event.key);
+                const buttons = optionsContainer.querySelectorAll('button');
+                if (buttons.length >= optionNumber && !questionAnswered) {
+                    const targetButton = buttons[optionNumber - 1];
+                    if (targetButton && !targetButton.disabled) {
+                        const buttonText = targetButton.textContent.substring(1); // Remove the number prefix
+                        checkAnswer(buttonText);
+                    }
+                }
+            }
+            
+            // Handle spacebar for next item
+            if (event.code === 'Space') {
+                event.preventDefault(); // Prevent page scroll
+                if (nextButton.style.display !== 'none' && !nextButton.disabled) {
+                    // Clear the auto-advance timeout since user manually pressed space
+                    if (autoNextTimeout) {
+                        clearTimeout(autoNextTimeout);
+                        autoNextTimeout = null;
+                    }
+                    loadQuestion();
+                } else if (gameCompleteDiv.style.display !== 'none') {
+                    restartGame();
+                }
+            }
+        });
+        
+        // Initialize audio context on first user interaction
+        document.addEventListener('click', initAudioContext, { once: true });
+        document.addEventListener('touchstart', initAudioContext, { once: true });
+
+        // Load voices when available (some browsers load them asynchronously)
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => {
+                // Voices are now loaded
+            };
+        }
+
+        // Initialize the game with default category
+        changeCategory();
+    </script>
+
+</body>
+
+</html>
